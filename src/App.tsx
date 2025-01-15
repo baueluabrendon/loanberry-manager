@@ -22,6 +22,8 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/apply" element={<Apply />} />
             <Route path="/portal" element={<ClientPortal />}>
+              <Route index element={<ClientPortal />} />
+              <Route path="profile" element={<ClientPortal />} />
               <Route path="repayments" element={<Repayments />} />
               <Route path="loans" element={<Loans />} />
             </Route>
