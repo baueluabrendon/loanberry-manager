@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { DocumentUpload } from "./loan-form/DocumentUpload";
 import { ApplicationDetails } from "./loan-form/ApplicationDetails";
 import { useNavigate } from "react-router-dom";
+import { FormStepper } from "./loan-form/FormStepper";
+import { FormActions } from "./loan-form/FormActions";
 
 const steps = ["Initial Documents", "Required Documents", "Application Details"];
 
@@ -21,7 +22,6 @@ export const LoanApplicationForm = () => {
     setProcessing(prev => ({ ...prev, [docId]: true }));
 
     try {
-      // Simulate document processing
       await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
         title: "Document Processed",
@@ -87,50 +87,15 @@ export const LoanApplicationForm = () => {
 
   return (
     <Card className="p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <div className="flex justify-between mb-4">
-          {steps.map((step, index) => (
-            <div key={step} className="flex items-center">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
-                  ${index <= currentStep ? "bg-primary text-white" : "bg-gray-200 text-gray-500"}`}
-              >
-                {index + 1}
-              </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={`h-1 w-12 mx-2 ${
-                    index < currentStep ? "bg-primary" : "bg-gray-200"
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        <h2 className="text-2xl font-semibold">{steps[currentStep]}</h2>
-      </div>
-
+      <FormStepper steps={steps} currentStep={currentStep} />
       <form onSubmit={handleSubmit} className="space-y-6">
         {renderStep()}
-        <div className="flex justify-between pt-4">
-          {currentStep > 0 && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setCurrentStep(currentStep - 1)}
-            >
-              Previous
-            </Button>
-          )}
-          <div className="flex gap-4 ml-auto">
-            <Button type="button" variant="outline" onClick={handleExit}>
-              Exit
-            </Button>
-            <Button type="submit">
-              {currentStep === steps.length - 1 ? "Submit Application" : "Next"}
-            </Button>
-          </div>
-        </div>
+        <FormActions
+          currentStep={currentStep}
+          totalSteps={steps.length}
+          onPrevious={() => setCurrentStep(currentStep - 1)}
+          onExit={handleExit}
+        />
       </form>
     </Card>
   );
