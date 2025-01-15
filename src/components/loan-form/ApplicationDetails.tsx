@@ -66,18 +66,6 @@ export const ApplicationDetails = ({
         { id: "accountType", label: "Account Type" },
       ],
     },
-    {
-      title: "Loan Details",
-      fields: [
-        { id: "purpose", label: "Purpose of Loan" },
-        { id: "loanAmount", label: "Loan Amount", type: "number" },
-        { id: "pvaAmount", label: "PVA Amount", type: "number" },
-        { id: "loanTerm", label: "Loan Term" },
-        { id: "totalRepayable", label: "Total Repayable", type: "number" },
-        { id: "grossSalary", label: "Gross Salary", type: "number" },
-        { id: "netSalary", label: "Net Salary", type: "number" },
-      ],
-    },
   ];
 
   const handleInputChange = (fieldId: string, value: string) => {
