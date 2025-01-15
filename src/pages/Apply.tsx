@@ -1,15 +1,15 @@
 import { Navigation } from "@/components/Navigation";
-import { LoginForm } from "@/components/LoginForm";
+import { LoanApplicationForm } from "@/components/LoanApplicationForm";
 
-const Index = () => {
+const Apply = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="container mx-auto px-4 py-8">
-        <LoginForm />
+        <LoanApplicationForm />
       </div>
     </div>
   );
 };
 
-export default Index;
+export default Apply;
