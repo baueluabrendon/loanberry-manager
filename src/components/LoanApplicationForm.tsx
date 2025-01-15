@@ -5,10 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Upload, File, CheckCircle2, AlertCircle } from "lucide-react";
+import { Upload, File, CheckCircle2 } from "lucide-react";
 
 const requiredDocuments = [
-  { id: "application", name: "Application Form" },
   { id: "terms", name: "Terms and Conditions Form" },
   { id: "employment", name: "Employment Confirmation Letter" },
   { id: "payslip1", name: "Pay Slip 1" },
@@ -22,7 +21,7 @@ const requiredDocuments = [
   { id: "id", name: "ID Document" },
 ];
 
-const steps = ["Documents Upload", "Personal Info", "Employment", "Loan Details"];
+const steps = ["Personal Info", "Documents Upload", "Employment", "Loan Details"];
 
 export const LoanApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -36,12 +35,14 @@ export const LoanApplicationForm = () => {
     loanAmount: "",
     purpose: "",
   });
-  const [documents, setDocuments] = useState<Record<string, File | null>>(
-    requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: null }), {})
-  );
-  const [processing, setProcessing] = useState<Record<string, boolean>>(
-    requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: false }), {})
-  );
+  const [documents, setDocuments] = useState<Record<string, File | null>>({
+    application: null,
+    ...requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: null }), {})
+  });
+  const [processing, setProcessing] = useState<Record<string, boolean>>({
+    application: false,
+    ...requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: false }), {})
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -54,13 +55,8 @@ export const LoanApplicationForm = () => {
     setDocuments(prev => ({ ...prev, [docId]: file }));
     setProcessing(prev => ({ ...prev, [docId]: true }));
 
-    // Simulate OCR processing
     try {
-      // Here you would typically send the file to your OCR service
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulated processing time
-      
-      // Update form data with extracted information
-      // This is where you would normally process the OCR results
+      await new Promise(resolve => setTimeout(resolve, 1500));
       toast({
         title: "Document Processed",
         description: `Successfully processed ${file.name}`,
@@ -87,6 +83,82 @@ export const LoanApplicationForm = () => {
       setCurrentStep(currentStep + 1);
     }
   };
+
+  const renderPersonalInfo = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="application">Application Form</Label>
+        <div className="relative">
+          <Input
+            id="application"
+            type="file"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleFileUpload("application", file);
+            }}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            className={cn(
+              "w-full justify-start",
+              documents.application && "border-green-500"
+            )}
+            onClick={() => document.getElementById("application")?.click()}
+          >
+            {processing.application ? (
+              <div className="flex items-center">
+                <File className="mr-2 h-4 w-4" />
+                Processing...
+              </div>
+            ) : documents.application ? (
+              <div className="flex items-center">
+                <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
+                {documents.application?.name}
+              </div>
+            ) : (
+              <div className="flex items-center">
+                <Upload className="mr-2 h-4 w-4" />
+                Upload Application Form
+              </div>
+            )}
+          </Button>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="fullName">Full Name</Label>
+        <Input
+          id="fullName"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleInputChange}
+          placeholder="John Doe"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          placeholder="john@example.com"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone Number</Label>
+        <Input
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleInputChange}
+          placeholder="(555) 555-5555"
+        />
+      </div>
+    </div>
+  );
 
   const renderDocumentUpload = () => (
     <div className="space-y-6">
@@ -139,98 +211,68 @@ export const LoanApplicationForm = () => {
     </div>
   );
 
+  const renderEmployment = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="employer">Current Employer</Label>
+        <Input
+          id="employer"
+          name="employer"
+          value={formData.employer}
+          onChange={handleInputChange}
+          placeholder="Company Name"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="income">Annual Income</Label>
+        <Input
+          id="income"
+          name="income"
+          type="number"
+          value={formData.income}
+          onChange={handleInputChange}
+          placeholder="60000"
+        />
+      </div>
+    </div>
+  );
+
+  const renderLoanDetails = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="loanAmount">Desired Loan Amount</Label>
+        <Input
+          id="loanAmount"
+          name="loanAmount"
+          type="number"
+          value={formData.loanAmount}
+          onChange={handleInputChange}
+          placeholder="10000"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="purpose">Loan Purpose</Label>
+        <Input
+          id="purpose"
+          name="purpose"
+          value={formData.purpose}
+          onChange={handleInputChange}
+          placeholder="Home Improvement"
+        />
+      </div>
+    </div>
+  );
+
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return renderDocumentUpload();
+        return renderPersonalInfo();
       case 1:
-        return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleInputChange}
-                placeholder="John Doe"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="john@example.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                placeholder="(555) 555-5555"
-              />
-            </div>
-          </div>
-        );
+        return renderDocumentUpload();
       case 2:
-        return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="employer">Current Employer</Label>
-              <Input
-                id="employer"
-                name="employer"
-                value={formData.employer}
-                onChange={handleInputChange}
-                placeholder="Company Name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="income">Annual Income</Label>
-              <Input
-                id="income"
-                name="income"
-                type="number"
-                value={formData.income}
-                onChange={handleInputChange}
-                placeholder="60000"
-              />
-            </div>
-          </div>
-        );
+        return renderEmployment();
       case 3:
-        return (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="loanAmount">Desired Loan Amount</Label>
-              <Input
-                id="loanAmount"
-                name="loanAmount"
-                type="number"
-                value={formData.loanAmount}
-                onChange={handleInputChange}
-                placeholder="10000"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="purpose">Loan Purpose</Label>
-              <Input
-                id="purpose"
-                name="purpose"
-                value={formData.purpose}
-                onChange={handleInputChange}
-                placeholder="Home Improvement"
-              />
-            </div>
-          </div>
-        );
+        return renderLoanDetails();
     }
   };
 
