@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Apply from "./pages/Apply";
 import ClientPortal from "./pages/ClientPortal";
 import Repayments from "./pages/Repayments";
+import Loans from "./pages/Loans";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/apply" element={<Apply />} />
             <Route path="/portal" element={<ClientPortal />}>
               <Route path="repayments" element={<Repayments />} />
+              <Route path="loans" element={<Loans />} />
             </Route>
           </Routes>
         </Router>
