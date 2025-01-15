@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Upload, File, CheckCircle2 } from "lucide-react";
+import { Upload, File, CheckCircle2, AlertCircle } from "lucide-react";
 
 const requiredDocuments = [
   { id: "application", name: "Application Form" },
@@ -22,7 +22,7 @@ const requiredDocuments = [
   { id: "id", name: "ID Document" },
 ];
 
-const steps = ["Personal Info", "Documents Upload", "Employment", "Loan Details"];
+const steps = ["Documents Upload", "Personal Info", "Employment", "Loan Details"];
 
 export const LoanApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -142,6 +142,8 @@ export const LoanApplicationForm = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
+        return renderDocumentUpload();
+      case 1:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -177,8 +179,6 @@ export const LoanApplicationForm = () => {
             </div>
           </div>
         );
-      case 1:
-        return renderDocumentUpload();
       case 2:
         return (
           <div className="space-y-4">
