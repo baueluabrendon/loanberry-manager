@@ -5,8 +5,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import { Upload, File, CheckCircle2, AlertCircle } from "lucide-react";
 
-const steps = ["Personal Info", "Employment", "Loan Details"];
+const requiredDocuments = [
+  { id: "application", name: "Application Form" },
+  { id: "terms", name: "Terms and Conditions Form" },
+  { id: "employment", name: "Employment Confirmation Letter" },
+  { id: "payslip1", name: "Pay Slip 1" },
+  { id: "payslip2", name: "Pay Slip 2" },
+  { id: "payslip3", name: "Pay Slip 3" },
+  { id: "bankStatement", name: "3 Months Bank Statement" },
+  { id: "salaryDeduction", name: "Irrevocable Salary Deduction Authority" },
+  { id: "variation", name: "Permanent Variation Advice" },
+  { id: "dataEntry", name: "Data Entry Form" },
+  { id: "nasfund", name: "Nasfund Account Form" },
+  { id: "id", name: "ID Document" },
+];
+
+const steps = ["Documents Upload", "Personal Info", "Employment", "Loan Details"];
 
 export const LoanApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -20,12 +36,44 @@ export const LoanApplicationForm = () => {
     loanAmount: "",
     purpose: "",
   });
+  const [documents, setDocuments] = useState<Record<string, File | null>>(
+    requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: null }), {})
+  );
+  const [processing, setProcessing] = useState<Record<string, boolean>>(
+    requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: false }), {})
+  );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleFileUpload = async (docId: string, file: File) => {
+    setDocuments(prev => ({ ...prev, [docId]: file }));
+    setProcessing(prev => ({ ...prev, [docId]: true }));
+
+    // Simulate OCR processing
+    try {
+      // Here you would typically send the file to your OCR service
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulated processing time
+      
+      // Update form data with extracted information
+      // This is where you would normally process the OCR results
+      toast({
+        title: "Document Processed",
+        description: `Successfully processed ${file.name}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Processing Error",
+        description: "Failed to process document. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setProcessing(prev => ({ ...prev, [docId]: false }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,15 +83,67 @@ export const LoanApplicationForm = () => {
         title: "Application Submitted",
         description: "We'll review your application and get back to you soon.",
       });
-      // Here you would typically send the data to your backend
     } else {
       setCurrentStep(currentStep + 1);
     }
   };
 
+  const renderDocumentUpload = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {requiredDocuments.map((doc) => (
+          <div key={doc.id} className="relative">
+            <Label htmlFor={doc.id} className="block mb-2">
+              {doc.name}
+            </Label>
+            <div className="relative">
+              <Input
+                id={doc.id}
+                type="file"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleFileUpload(doc.id, file);
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className={cn(
+                  "w-full justify-start",
+                  documents[doc.id] && "border-green-500"
+                )}
+                onClick={() => document.getElementById(doc.id)?.click()}
+              >
+                {processing[doc.id] ? (
+                  <div className="flex items-center">
+                    <File className="mr-2 h-4 w-4" />
+                    Processing...
+                  </div>
+                ) : documents[doc.id] ? (
+                  <div className="flex items-center">
+                    <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
+                    {documents[doc.id]?.name}
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload {doc.name}
+                  </div>
+                )}
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   const renderStep = () => {
     switch (currentStep) {
       case 0:
+        return renderDocumentUpload();
+      case 1:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -79,7 +179,7 @@ export const LoanApplicationForm = () => {
             </div>
           </div>
         );
-      case 1:
+      case 2:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -105,7 +205,7 @@ export const LoanApplicationForm = () => {
             </div>
           </div>
         );
-      case 2:
+      case 3:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -135,7 +235,7 @@ export const LoanApplicationForm = () => {
   };
 
   return (
-    <Card className="p-6 max-w-2xl mx-auto">
+    <Card className="p-6 max-w-4xl mx-auto">
       <div className="mb-8">
         <div className="flex justify-between mb-4">
           {steps.map((step, index) => (
