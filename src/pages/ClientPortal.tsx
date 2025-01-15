@@ -16,17 +16,18 @@ const mockPersonalDetails = {
 const mockAccountSummary = {
   totalLoans: 3,
   activeLoans: 1,
-  totalAmount: 15000,
-  repaidAmount: 5000,
-  nextPaymentDate: "2024-04-01",
+  totalBalance: 15000,  // Changed from totalAmount
+  nextPayment: "2024-04-01", // Changed from nextPaymentDate
   nextPaymentAmount: 500,
+  totalRepaid: 5000,    // Added missing field
+  loanLimit: 25000,     // Added missing field
 };
 
 const mockLoanHistory = [
   {
-    id: 1,
+    id: "LOAN-001",     // Changed from number to string
     amount: 10000,
-    dateApproved: "2023-12-01",
+    dateIssued: "2023-12-01", // Changed from dateApproved
     status: "active",
     repaidAmount: 5000,
   },
@@ -38,7 +39,7 @@ const ClientPortal = () => {
       <div className="fixed top-0 w-full z-50 bg-white">
         <Navigation />
       </div>
-      <div className="pt-16"> {/* Add padding to account for fixed header */}
+      <div className="pt-16">
         <SidebarProvider>
           <div className="container mx-auto px-4 py-8 flex gap-6">
             <AppSidebar />
