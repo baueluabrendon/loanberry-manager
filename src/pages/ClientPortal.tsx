@@ -5,8 +5,12 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@
 import { CalendarIcon, CreditCard, DollarSign, Users } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { Outlet, useLocation } from "react-router-dom";
 
 const ClientPortal = () => {
+  const location = useLocation();
+  const isRepayments = location.pathname.includes('/repayments');
+
   // Mock data - in a real app, this would come from an API
   const userProfile = {
     name: "John Doe",
@@ -43,7 +47,11 @@ const ClientPortal = () => {
         <div className="flex-1">
           <Navigation />
           <main className="container mx-auto px-4 py-8">
-            {/* User Profile Section */}
+            {isRepayments ? (
+              <Outlet />
+            ) : (
+              <>
+                {/* User Profile Section */}
             <div className="mb-8">
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
                 <div className="flex items-center space-x-4">
@@ -62,7 +70,7 @@ const ClientPortal = () => {
               </div>
             </div>
 
-            {/* Summary Cards */}
+                {/* Summary Cards */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -112,7 +120,7 @@ const ClientPortal = () => {
               </Card>
             </div>
 
-            {/* Repayment Schedule */}
+                {/* Repayment Schedule */}
             {accountSummary.activeLoans > 0 && (
               <div className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">Loan Repayment Schedule</h2>
@@ -143,7 +151,7 @@ const ClientPortal = () => {
               </div>
             )}
 
-            {/* Recent Applications */}
+                {/* Recent Applications */}
             <div>
               <h2 className="text-xl font-semibold mb-4">Recent Applications</h2>
               <div className="grid gap-4">
@@ -157,6 +165,8 @@ const ClientPortal = () => {
                 ))}
               </div>
             </div>
+              </>
+            )}
           </main>
         </div>
       </div>
