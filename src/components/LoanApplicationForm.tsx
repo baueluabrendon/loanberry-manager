@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-import { Upload, File, CheckCircle2 } from "lucide-react";
+import { PersonalInfoSection } from "./loan-form/PersonalInfoSection";
+import { EmploymentInfoSection } from "./loan-form/EmploymentInfoSection";
+import { ResidentialInfoSection } from "./loan-form/ResidentialInfoSection";
+import { FinancialDetailsSection } from "./loan-form/FinancialDetailsSection";
+import { LoanDetailsSection } from "./loan-form/LoanDetailsSection";
+import { DocumentUploadSection } from "./loan-form/DocumentUploadSection";
 
 const requiredDocuments = [
   { id: "terms", name: "Terms and Conditions Form" },
@@ -21,26 +24,41 @@ const requiredDocuments = [
   { id: "id", name: "ID Document" },
 ];
 
-const steps = ["Personal Info", "Documents Upload", "Employment", "Loan Details"];
+const steps = [
+  "Loan Application Details",
+  "Documents Upload",
+  "Employment Info",
+  "Residential Info",
+  "Financial Details",
+  "Loan Details"
+];
 
 export const LoanApplicationForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    employer: "",
-    income: "",
-    loanAmount: "",
-    purpose: "",
+    // Personal Info
+    givenName: "", surname: "", dateOfBirth: "", gender: "", mobileNumber: "",
+    email: "", village: "", district: "", province: "", nationality: "",
+    // Employment Info
+    department: "", fileNumber: "", postalAddress: "", workPhone: "", fax: "",
+    dateEmployed: "", paymaster: "",
+    // Residential Info
+    lot: "", section: "", suburb: "", streetName: "", maritalStatus: "",
+    spouseLastName: "", spouseFirstName: "", spouseEmployer: "", spouseContact: "",
+    // Financial Details
+    bank: "", bankBranch: "", bsbCode: "", accountName: "", accountNumber: "",
+    accountType: "",
+    // Loan Details
+    purpose: "", loanAmount: "", pvaAmount: "", loanTerm: "", totalRepayable: "",
+    grossSalary: "", netSalary: ""
   });
+
   const [documents, setDocuments] = useState<Record<string, File | null>>({
-    application: null,
     ...requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: null }), {})
   });
+
   const [processing, setProcessing] = useState<Record<string, boolean>>({
-    application: false,
     ...requiredDocuments.reduce((acc, doc) => ({ ...acc, [doc.id]: false }), {})
   });
 
@@ -84,195 +102,29 @@ export const LoanApplicationForm = () => {
     }
   };
 
-  const renderPersonalInfo = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="application">Application Form</Label>
-        <div className="relative">
-          <Input
-            id="application"
-            type="file"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) handleFileUpload("application", file);
-            }}
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className={cn(
-              "w-full justify-start",
-              documents.application && "border-green-500"
-            )}
-            onClick={() => document.getElementById("application")?.click()}
-          >
-            {processing.application ? (
-              <div className="flex items-center">
-                <File className="mr-2 h-4 w-4" />
-                Processing...
-              </div>
-            ) : documents.application ? (
-              <div className="flex items-center">
-                <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                {documents.application?.name}
-              </div>
-            ) : (
-              <div className="flex items-center">
-                <Upload className="mr-2 h-4 w-4" />
-                Upload Application Form
-              </div>
-            )}
-          </Button>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="fullName">Full Name</Label>
-        <Input
-          id="fullName"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="John Doe"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="john@example.com"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="phone">Phone Number</Label>
-        <Input
-          id="phone"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          placeholder="(555) 555-5555"
-        />
-      </div>
-    </div>
-  );
-
-  const renderDocumentUpload = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {requiredDocuments.map((doc) => (
-          <div key={doc.id} className="relative">
-            <Label htmlFor={doc.id} className="block mb-2">
-              {doc.name}
-            </Label>
-            <div className="relative">
-              <Input
-                id={doc.id}
-                type="file"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleFileUpload(doc.id, file);
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                className={cn(
-                  "w-full justify-start",
-                  documents[doc.id] && "border-green-500"
-                )}
-                onClick={() => document.getElementById(doc.id)?.click()}
-              >
-                {processing[doc.id] ? (
-                  <div className="flex items-center">
-                    <File className="mr-2 h-4 w-4" />
-                    Processing...
-                  </div>
-                ) : documents[doc.id] ? (
-                  <div className="flex items-center">
-                    <CheckCircle2 className="mr-2 h-4 w-4 text-green-500" />
-                    {documents[doc.id]?.name}
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload {doc.name}
-                  </div>
-                )}
-              </Button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderEmployment = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="employer">Current Employer</Label>
-        <Input
-          id="employer"
-          name="employer"
-          value={formData.employer}
-          onChange={handleInputChange}
-          placeholder="Company Name"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="income">Annual Income</Label>
-        <Input
-          id="income"
-          name="income"
-          type="number"
-          value={formData.income}
-          onChange={handleInputChange}
-          placeholder="60000"
-        />
-      </div>
-    </div>
-  );
-
-  const renderLoanDetails = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="loanAmount">Desired Loan Amount</Label>
-        <Input
-          id="loanAmount"
-          name="loanAmount"
-          type="number"
-          value={formData.loanAmount}
-          onChange={handleInputChange}
-          placeholder="10000"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="purpose">Loan Purpose</Label>
-        <Input
-          id="purpose"
-          name="purpose"
-          value={formData.purpose}
-          onChange={handleInputChange}
-          placeholder="Home Improvement"
-        />
-      </div>
-    </div>
-  );
-
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return renderPersonalInfo();
+        return <PersonalInfoSection formData={formData} handleInputChange={handleInputChange} />;
       case 1:
-        return renderDocumentUpload();
+        return (
+          <DocumentUploadSection
+            documents={documents}
+            processing={processing}
+            requiredDocuments={requiredDocuments}
+            handleFileUpload={handleFileUpload}
+          />
+        );
       case 2:
-        return renderEmployment();
+        return <EmploymentInfoSection formData={formData} handleInputChange={handleInputChange} />;
       case 3:
-        return renderLoanDetails();
+        return <ResidentialInfoSection formData={formData} handleInputChange={handleInputChange} />;
+      case 4:
+        return <FinancialDetailsSection formData={formData} handleInputChange={handleInputChange} />;
+      case 5:
+        return <LoanDetailsSection formData={formData} handleInputChange={handleInputChange} />;
+      default:
+        return null;
     }
   };
 
