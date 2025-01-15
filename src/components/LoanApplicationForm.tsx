@@ -5,7 +5,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { DocumentUpload } from "./loan-form/DocumentUpload";
 import { ApplicationDetails } from "./loan-form/ApplicationDetails";
 import { useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
 
 const steps = ["Initial Documents", "Required Documents", "Application Details"];
 
@@ -87,16 +86,7 @@ export const LoanApplicationForm = () => {
   };
 
   return (
-    <Card className="p-6 max-w-7xl mx-auto relative">
-      <Button
-        variant="ghost"
-        size="icon"
-        className="absolute right-4 top-4"
-        onClick={handleExit}
-      >
-        <X className="h-4 w-4" />
-      </Button>
-
+    <Card className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
         <div className="flex justify-between mb-4">
           {steps.map((step, index) => (
@@ -132,9 +122,14 @@ export const LoanApplicationForm = () => {
               Previous
             </Button>
           )}
-          <Button type="submit" className="ml-auto">
-            {currentStep === steps.length - 1 ? "Submit Application" : "Next"}
-          </Button>
+          <div className="flex gap-4 ml-auto">
+            <Button type="button" variant="outline" onClick={handleExit}>
+              Exit
+            </Button>
+            <Button type="submit">
+              {currentStep === steps.length - 1 ? "Submit Application" : "Next"}
+            </Button>
+          </div>
         </div>
       </form>
     </Card>
