@@ -1,12 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ApplicationDetailsProps {
   formData: any;
   readOnly?: boolean;
   onChange?: (data: any) => void;
 }
+
+const loanPurposeOptions = [
+  "School Fees",
+  "Vacation",
+  "Medical",
+  "Funeral",
+  "Holiday",
+  "Customary",
+  "Others"
+];
 
 export const ApplicationDetails = ({ 
   formData, 
@@ -70,10 +81,11 @@ export const ApplicationDetails = ({
       title: "Loan Details",
       fields: [
         { id: "loanAmount", label: "Loan Amount", type: "number" },
-        { id: "loanPurpose", label: "Loan Purpose" },
-        { id: "loanTerm", label: "Loan Term (months)", type: "number" },
-        { id: "repaymentFrequency", label: "Repayment Frequency" },
-        { id: "preferredRepaymentDay", label: "Preferred Repayment Day", type: "number" },
+        { id: "pvaAmount", label: "PVA Amount", type: "number" },
+        { id: "loanTerm", label: "Loan Term (# of Fortnights)", type: "number" },
+        { id: "totalLoanRepayable", label: "Total Loan Repayable", type: "number" },
+        { id: "grossSalary", label: "Gross Salary", type: "number" },
+        { id: "netSalary", label: "Net Salary", type: "number" },
       ],
     },
   ];
@@ -103,6 +115,27 @@ export const ApplicationDetails = ({
                 />
               </div>
             ))}
+            {section.title === "Loan Details" && (
+              <div className="space-y-2">
+                <Label htmlFor="loanPurpose">Loan Purpose</Label>
+                <Select
+                  disabled={readOnly}
+                  value={formData.loanPurpose || ""}
+                  onValueChange={(value) => handleInputChange("loanPurpose", value)}
+                >
+                  <SelectTrigger className={readOnly ? "bg-gray-50" : ""}>
+                    <SelectValue placeholder="Select purpose" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {loanPurposeOptions.map((purpose) => (
+                      <SelectItem key={purpose} value={purpose}>
+                        {purpose}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
         </Card>
       ))}
