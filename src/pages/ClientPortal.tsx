@@ -2,6 +2,7 @@ import { Navigation } from "@/components/Navigation";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProfileDetails } from "@/components/profile/ProfileDetails";
 import { AccountSummary } from "@/components/profile/AccountSummary";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 const mockPersonalDetails = {
   givenName: "John",
@@ -10,7 +11,6 @@ const mockPersonalDetails = {
   gender: "Male",
   mobileNumber: "+1234567890",
   email: "john.doe@example.com",
-  // ... other mock data fields
 };
 
 const mockAccountSummary = {
@@ -31,23 +31,24 @@ const mockLoanHistory = [
     status: "active",
     repaidAmount: 5000,
   },
-  // ... other mock loan history entries
 ];
 
 const ClientPortal = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <div className="container mx-auto px-4 py-8 flex gap-6">
-        <AppSidebar />
-        <div className="flex-1 space-y-6">
-          <ProfileDetails formData={mockPersonalDetails} />
-          <AccountSummary 
-            accountSummary={mockAccountSummary}
-            loanHistory={mockLoanHistory}
-          />
+      <SidebarProvider>
+        <div className="container mx-auto px-4 py-8 flex gap-6 w-full">
+          <AppSidebar />
+          <div className="flex-1 space-y-6">
+            <ProfileDetails formData={mockPersonalDetails} />
+            <AccountSummary 
+              accountSummary={mockAccountSummary}
+              loanHistory={mockLoanHistory}
+            />
+          </div>
         </div>
-      </div>
+      </SidebarProvider>
     </div>
   );
 };
