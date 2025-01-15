@@ -1,8 +1,8 @@
-import { Navigation } from "@/components/Navigation";
 import { AppSidebar } from "@/components/AppSidebar";
 import { ProfileDetails } from "@/components/profile/ProfileDetails";
 import { AccountSummary } from "@/components/profile/AccountSummary";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Navigation } from "@/components/Navigation";
 
 const mockPersonalDetails = {
   givenName: "John",
@@ -16,18 +16,17 @@ const mockPersonalDetails = {
 const mockAccountSummary = {
   totalLoans: 3,
   activeLoans: 1,
-  totalBalance: 15000,
-  nextPayment: "2024-04-01",
+  totalAmount: 15000,
+  repaidAmount: 5000,
+  nextPaymentDate: "2024-04-01",
   nextPaymentAmount: 500,
-  totalRepaid: 5000,
-  loanLimit: 25000,
 };
 
 const mockLoanHistory = [
   {
-    id: "L001",
+    id: 1,
     amount: 10000,
-    dateIssued: "2023-01-15",
+    dateApproved: "2023-12-01",
     status: "active",
     repaidAmount: 5000,
   },
@@ -36,19 +35,23 @@ const mockLoanHistory = [
 const ClientPortal = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      <SidebarProvider>
-        <div className="container mx-auto px-4 py-8 flex gap-6 w-full">
-          <AppSidebar />
-          <div className="flex-1 space-y-6">
-            <ProfileDetails formData={mockPersonalDetails} />
-            <AccountSummary 
-              accountSummary={mockAccountSummary}
-              loanHistory={mockLoanHistory}
-            />
+      <div className="fixed top-0 w-full z-50 bg-white">
+        <Navigation />
+      </div>
+      <div className="pt-16"> {/* Add padding to account for fixed header */}
+        <SidebarProvider>
+          <div className="container mx-auto px-4 py-8 flex gap-6">
+            <AppSidebar />
+            <div className="flex-1 space-y-6">
+              <ProfileDetails formData={mockPersonalDetails} />
+              <AccountSummary 
+                accountSummary={mockAccountSummary}
+                loanHistory={mockLoanHistory}
+              />
+            </div>
           </div>
-        </div>
-      </SidebarProvider>
+        </SidebarProvider>
+      </div>
     </div>
   );
 };

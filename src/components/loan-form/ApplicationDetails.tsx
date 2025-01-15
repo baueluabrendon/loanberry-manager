@@ -66,6 +66,16 @@ export const ApplicationDetails = ({
         { id: "accountType", label: "Account Type" },
       ],
     },
+    {
+      title: "Loan Details",
+      fields: [
+        { id: "loanAmount", label: "Loan Amount", type: "number" },
+        { id: "loanPurpose", label: "Loan Purpose" },
+        { id: "loanTerm", label: "Loan Term (months)", type: "number" },
+        { id: "repaymentFrequency", label: "Repayment Frequency" },
+        { id: "preferredRepaymentDay", label: "Preferred Repayment Day", type: "number" },
+      ],
+    },
   ];
 
   const handleInputChange = (fieldId: string, value: string) => {
