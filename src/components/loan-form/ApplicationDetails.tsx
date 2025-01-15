@@ -1,14 +1,18 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Select } from "@/components/ui/select";
 
 interface ApplicationDetailsProps {
   formData: any;
   readOnly?: boolean;
+  onChange?: (data: any) => void;
 }
 
-export const ApplicationDetails = ({ formData, readOnly = true }: ApplicationDetailsProps) => {
+export const ApplicationDetails = ({ 
+  formData, 
+  readOnly = true, 
+  onChange 
+}: ApplicationDetailsProps) => {
   const sections = [
     {
       title: "Personal Information",
@@ -76,6 +80,12 @@ export const ApplicationDetails = ({ formData, readOnly = true }: ApplicationDet
     },
   ];
 
+  const handleInputChange = (fieldId: string, value: string) => {
+    if (onChange) {
+      onChange({ [fieldId]: value });
+    }
+  };
+
   return (
     <div className="space-y-8">
       {sections.map((section) => (
@@ -89,6 +99,7 @@ export const ApplicationDetails = ({ formData, readOnly = true }: ApplicationDet
                   id={field.id}
                   type={field.type || "text"}
                   value={formData[field.id] || ""}
+                  onChange={(e) => handleInputChange(field.id, e.target.value)}
                   readOnly={readOnly}
                   className={readOnly ? "bg-gray-50" : ""}
                 />

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { DocumentUpload } from "./loan-form/DocumentUpload";
 import { ApplicationDetails } from "./loan-form/ApplicationDetails";
+import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 const steps = ["Initial Documents", "Required Documents", "Application Details"];
 
@@ -13,6 +15,7 @@ export const LoanApplicationForm = () => {
   const [formData, setFormData] = useState({});
   const [documents, setDocuments] = useState<Record<string, File | null>>({});
   const [processing, setProcessing] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
 
   const handleFileUpload = async (docId: string, file: File) => {
     setDocuments(prev => ({ ...prev, [docId]: file }));
@@ -48,6 +51,16 @@ export const LoanApplicationForm = () => {
     }
   };
 
+  const handleExit = () => {
+    if (window.confirm("Are you sure you want to exit? Any unsaved progress will be lost.")) {
+      navigate("/");
+    }
+  };
+
+  const handleFormDataChange = (newData: any) => {
+    setFormData(prev => ({ ...prev, ...newData }));
+  };
+
   const renderStep = () => {
     switch (currentStep) {
       case 0:
@@ -61,14 +74,29 @@ export const LoanApplicationForm = () => {
           />
         );
       case 2:
-        return <ApplicationDetails formData={formData} />;
+        return (
+          <ApplicationDetails 
+            formData={formData} 
+            readOnly={false}
+            onChange={handleFormDataChange}
+          />
+        );
       default:
         return null;
     }
   };
 
   return (
-    <Card className="p-6 max-w-7xl mx-auto">
+    <Card className="p-6 max-w-7xl mx-auto relative">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute right-4 top-4"
+        onClick={handleExit}
+      >
+        <X className="h-4 w-4" />
+      </Button>
+
       <div className="mb-8">
         <div className="flex justify-between mb-4">
           {steps.map((step, index) => (
