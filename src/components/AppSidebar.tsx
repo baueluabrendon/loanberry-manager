@@ -63,7 +63,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
 
   return (
-    <Sidebar className="bg-[#F2FCE2]">
+    <Sidebar className="bg-[#CCEDB9]">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
