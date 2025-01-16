@@ -6,7 +6,7 @@ export const Navigation = () => {
   const location = useLocation();
 
   return (
-    <nav className="bg-[#FEF7CD] shadow-sm border-b">
+    <nav className="bg-[#FFD700] shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <h1 className="text-2xl font-semibold text-gray-900">
