@@ -3,7 +3,6 @@ import {
   DollarSign, 
   FileText, 
   Home, 
-  Settings, 
   User, 
   HelpCircle 
 } from "lucide-react";
@@ -49,11 +48,6 @@ const menuItems = [
     title: "Support",
     icon: HelpCircle,
     path: "/portal/support"
-  },
-  {
-    title: "Settings",
-    icon: Settings,
-    path: "/portal/settings"
   }
 ];
 

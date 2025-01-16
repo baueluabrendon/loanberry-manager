@@ -3,6 +3,7 @@ import { Navigation } from "@/components/Navigation";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Users, CreditCard, Calendar } from "lucide-react";
+import { RepaymentHistory } from "@/components/RepaymentHistory";
 
 const ClientPortal = () => {
   const analytics = {
@@ -89,6 +90,12 @@ const ClientPortal = () => {
                     </p>
                   </CardContent>
                 </Card>
+              </div>
+
+              {/* Repayment History Table */}
+              <div className="mt-8">
+                <h2 className="text-xl font-semibold mb-4">Recent Repayments</h2>
+                <RepaymentHistory />
               </div>
             </div>
           </div>

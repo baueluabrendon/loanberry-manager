@@ -4,13 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,12 +20,6 @@ export const LoginForm = () => {
 
   return (
     <div className="relative w-full max-w-md mx-auto mt-10">
-      <Button 
-        onClick={() => navigate('/apply')}
-        className="absolute -left-32 top-0"
-      >
-        Apply Now
-      </Button>
       <Card className="p-6">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
