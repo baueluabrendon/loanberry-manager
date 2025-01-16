@@ -2,27 +2,9 @@ import { Button } from "@/components/ui/button";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Navigation } from "@/components/Navigation";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { Printer, Mail, ArrowLeft, RefreshCw } from "lucide-react";
+import { LoanDetailsForm } from "@/components/forms/loan/LoanDetailsForm";
+import { LoanHistoryTable } from "@/components/forms/loan/LoanHistoryTable";
 import { useState } from "react";
 
 const Loans = () => {
@@ -42,7 +24,7 @@ const Loans = () => {
   ];
 
   const canRefinance = (repaidAmount: number, totalAmount: number) => {
-    return (repaidAmount / totalAmount) >= 0.8;
+    return repaidAmount / totalAmount >= 0.8;
   };
 
   const handlePrint = () => {
@@ -77,125 +59,16 @@ const Loans = () => {
                   </Button>
                 </div>
 
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Loan ID</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Date Issued</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Repaid Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {loanHistory.map((loan) => (
-                      <TableRow key={loan.id}>
-                        <TableCell>{loan.id}</TableCell>
-                        <TableCell>${loan.amount.toLocaleString()}</TableCell>
-                        <TableCell>{loan.dateIssued}</TableCell>
-                        <TableCell>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                            loan.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {loan.status}
-                          </span>
-                        </TableCell>
-                        <TableCell>${loan.repaidAmount.toLocaleString()}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                <LoanHistoryTable loans={loanHistory} />
 
-                <Dialog open={showRepaymentSchedule} onOpenChange={setShowRepaymentSchedule}>
-                  <DialogContent className="max-w-3xl">
-                    <DialogHeader>
-                      <DialogTitle>Repayment Schedule</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="space-x-2">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                onClick={handlePrint}
-                              >
-                                <Printer className="h-4 w-4 mr-2" />
-                                Print
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              Print repayment schedule
-                            </TooltipContent>
-                          </Tooltip>
-
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                onClick={handleEmail}
-                              >
-                                <Mail className="h-4 w-4 mr-2" />
-                                Email
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              Email repayment schedule
-                            </TooltipContent>
-                          </Tooltip>
-
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="outline"
-                                disabled={!canRefinance(32000, 40000)}
-                              >
-                                <RefreshCw className="h-4 w-4 mr-2" />
-                                Refinance
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              {canRefinance(32000, 40000)
-                                ? "Apply for refinancing"
-                                : "80% of current loan must be repaid before refinancing"}
-                            </TooltipContent>
-                          </Tooltip>
-                        </div>
-
-                        <Button
-                          variant="ghost"
-                          onClick={() => setShowRepaymentSchedule(false)}
-                        >
-                          <ArrowLeft className="h-4 w-4 mr-2" />
-                          Exit
-                        </Button>
-                      </div>
-
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead>Payment Date</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Status</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {repaymentSchedule.map((payment, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{payment.date}</TableCell>
-                              <TableCell>${payment.amount.toLocaleString()}</TableCell>
-                              <TableCell>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                  {payment.status}
-                                </span>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <LoanDetailsForm
+                  showRepaymentSchedule={showRepaymentSchedule}
+                  setShowRepaymentSchedule={setShowRepaymentSchedule}
+                  handlePrint={handlePrint}
+                  handleEmail={handleEmail}
+                  repaymentSchedule={repaymentSchedule}
+                  canRefinance={canRefinance(32000, 40000)}
+                />
               </div>
             </div>
           </SidebarInset>
