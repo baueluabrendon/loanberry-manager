@@ -10,6 +10,7 @@ import Repayments from "./pages/Repayments";
 import Loans from "./pages/Loans";
 import Profile from "./pages/Profile";
 import Support from "./pages/Support";
+import Applications from "./pages/Applications";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/portal/repayments" element={<Repayments />} />
             <Route path="/portal/loans" element={<Loans />} />
             <Route path="/portal/support" element={<Support />} />
+            <Route path="/portal/applications" element={<Applications />} />
           </Routes>
         </Router>
       </TooltipProvider>

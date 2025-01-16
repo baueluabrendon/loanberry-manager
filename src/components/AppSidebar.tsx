@@ -4,7 +4,8 @@ import {
   FileText, 
   Home, 
   User, 
-  HelpCircle 
+  HelpCircle,
+  AlertCircle
 } from "lucide-react";
 import {
   Sidebar,
@@ -15,6 +16,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuBadge
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router-dom";
 
@@ -28,6 +30,12 @@ const menuItems = [
     title: "Apply for a New Loan",
     icon: FileText,
     path: "/apply"
+  },
+  {
+    title: "Application Status",
+    icon: AlertCircle,
+    path: "/portal/applications",
+    badge: "2"
   },
   {
     title: "Repayments",
@@ -69,6 +77,9 @@ export function AppSidebar() {
                   >
                     <item.icon className="w-4 h-4" />
                     <span>{item.title}</span>
+                    {item.badge && (
+                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
