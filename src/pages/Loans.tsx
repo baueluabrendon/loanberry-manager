@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Navigation } from "@/components/Navigation";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import {
   Dialog,
   DialogContent,
@@ -65,11 +65,11 @@ const Loans = () => {
       <div className="fixed top-0 w-full z-50 bg-white">
         <Navigation />
       </div>
-      <div className="pt-16">
-        <SidebarProvider>
-          <div className="container mx-auto px-4 py-8 flex gap-6">
-            <AppSidebar />
-            <div className="flex-1 space-y-6">
+      <SidebarProvider>
+        <div className="pt-16 flex w-full">
+          <AppSidebar />
+          <SidebarInset className="flex-1">
+            <div className="container mx-auto px-4 py-8">
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <Button onClick={() => setShowRepaymentSchedule(true)}>
@@ -198,9 +198,9 @@ const Loans = () => {
                 </Dialog>
               </div>
             </div>
-          </div>
-        </SidebarProvider>
-      </div>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
     </div>
   );
 };
