@@ -16,17 +16,18 @@ const mockPersonalDetails = {
 const mockAccountSummary = {
   totalLoans: 3,
   activeLoans: 1,
-  totalAmount: 15000,
-  repaidAmount: 5000,
-  nextPaymentDate: "2024-04-01",
+  totalBalance: 15000,
+  nextPayment: "2024-04-01",
   nextPaymentAmount: 500,
+  totalRepaid: 5000,
+  loanLimit: 25000,
 };
 
 const mockLoanHistory = [
   {
-    id: 1,
+    id: "LOAN-001",
     amount: 10000,
-    dateApproved: "2023-12-01",
+    dateIssued: "2023-12-01",
     status: "active",
     repaidAmount: 5000,
   },
