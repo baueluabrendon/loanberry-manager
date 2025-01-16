@@ -1,8 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export const Navigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <nav className="bg-white shadow-sm border-b">
@@ -11,12 +12,14 @@ export const Navigation = () => {
           <h1 className="text-2xl font-semibold text-gray-900">
             Welcome to K&R Financial Services
           </h1>
-          <Button 
-            onClick={() => navigate('/apply')}
-            className="bg-primary hover:bg-primary/90"
-          >
-            Apply Now
-          </Button>
+          {location.pathname === '/' && (
+            <Button 
+              onClick={() => navigate('/apply')}
+              className="bg-primary hover:bg-primary/90"
+            >
+              Apply Now
+            </Button>
+          )}
         </div>
       </div>
     </nav>
