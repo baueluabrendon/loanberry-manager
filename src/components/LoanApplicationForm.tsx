@@ -45,6 +45,8 @@ export const LoanApplicationForm = () => {
         title: "Application Submitted",
         description: "We'll review your application and get back to you soon.",
       });
+      // After successful submission, redirect to client portal
+      navigate("/portal");
     } else {
       setCurrentStep(currentStep + 1);
     }
@@ -52,7 +54,7 @@ export const LoanApplicationForm = () => {
 
   const handleExit = () => {
     if (window.confirm("Are you sure you want to exit? Any unsaved progress will be lost.")) {
-      navigate("/");
+      navigate("/portal"); // Changed from "/" to "/portal"
     }
   };
 
