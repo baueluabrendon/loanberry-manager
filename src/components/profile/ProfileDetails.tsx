@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { LoanDetails } from "./LoanDetails";
 
 interface ProfileDetailsProps {
   formData: any;
@@ -96,6 +97,7 @@ export const ProfileDetails = ({
           </div>
         </Card>
       ))}
+      <LoanDetails formData={formData} readOnly={readOnly} onChange={onChange} />
     </div>
   );
 };

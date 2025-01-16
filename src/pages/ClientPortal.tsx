@@ -16,18 +16,17 @@ const mockPersonalDetails = {
 const mockAccountSummary = {
   totalLoans: 3,
   activeLoans: 1,
-  totalBalance: 15000,  // Changed from totalAmount
-  nextPayment: "2024-04-01", // Changed from nextPaymentDate
+  totalAmount: 15000,
+  repaidAmount: 5000,
+  nextPaymentDate: "2024-04-01",
   nextPaymentAmount: 500,
-  totalRepaid: 5000,    // Added missing field
-  loanLimit: 25000,     // Added missing field
 };
 
 const mockLoanHistory = [
   {
-    id: "LOAN-001",     // Changed from number to string
+    id: 1,
     amount: 10000,
-    dateIssued: "2023-12-01", // Changed from dateApproved
+    dateApproved: "2023-12-01",
     status: "active",
     repaidAmount: 5000,
   },
