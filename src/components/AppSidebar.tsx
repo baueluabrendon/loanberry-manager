@@ -66,7 +66,7 @@ export function AppSidebar() {
     <Sidebar className="bg-[#32CD32]">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-white">Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -74,11 +74,12 @@ export function AppSidebar() {
                   <SidebarMenuButton 
                     onClick={() => navigate(item.path)}
                     tooltip={item.title}
+                    className="text-white hover:text-white/90"
                   >
                     <item.icon className="w-4 h-4" />
                     <span>{item.title}</span>
                     {item.badge && (
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+                      <SidebarMenuBadge className="bg-white text-[#32CD32]">{item.badge}</SidebarMenuBadge>
                     )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
